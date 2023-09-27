@@ -61,6 +61,7 @@
             this.label_Y = new System.Windows.Forms.Label();
             this.pictureBox_map = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.label_shag = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_control)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.up_T)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.up_B)).BeginInit();
@@ -378,14 +379,23 @@
             // 
             // timer1
             // 
-            this.timer1.Interval = 42000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // label_shag
+            // 
+            this.label_shag.AutoSize = true;
+            this.label_shag.Location = new System.Drawing.Point(309, 118);
+            this.label_shag.Name = "label_shag";
+            this.label_shag.Size = new System.Drawing.Size(32, 13);
+            this.label_shag.TabIndex = 55;
+            this.label_shag.Text = "Shag";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1045, 450);
+            this.Controls.Add(this.label_shag);
             this.Controls.Add(this.pictureBox_map);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label_Y);
@@ -464,6 +474,7 @@
         private System.Windows.Forms.Label label_Y;
         private System.Windows.Forms.PictureBox pictureBox_map;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label label_shag;
     }
 }
 

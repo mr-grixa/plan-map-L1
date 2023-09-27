@@ -291,8 +291,8 @@ namespace L1
         {
             if (checkBox_AI.Checked)
             {
-                Rmess.B = 30;
-                Rmess.F = 100;
+                Rmess.B = 0;
+                Rmess.F = 0;
                 Rmess.N++;
                 SendUDPMessage();
                 timer1.Start();
@@ -306,19 +306,67 @@ namespace L1
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            label_shag.Text = shag.ToString();
             switch (shag)
             {
                 case 0:
-                    shag = 1;
-                    Rmess.B = -30;
+                    Rmess.B = 0;
                     Rmess.F = 100;
                     Rmess.N++;
+                    if (int.Parse(Rdata.d3) < 200)
+                    {
+                        shag++;
+                        Rmess.F = 0;
+                    }
                     SendUDPMessage();
                     break;
                 case 1:
-                    Rmess.B = 0;
-                    Rmess.F = 0;
+                    Rmess.B = -50;
+                    Rmess.F = 75;
                     Rmess.N++;
+                    if (int.Parse(Rdata.d6) < 200)
+                    {
+                        shag++;
+                        Rmess.B = 25;
+                    }
+                    SendUDPMessage();
+                    break;
+                case 2:
+                    Rmess.B = 50;
+                    Rmess.F = 75;
+                    Rmess.N++;
+                    if (int.Parse(Rdata.d6) > 300)
+                    {
+                        shag++;
+                        Rmess.B = 0;
+                    }
+                    SendUDPMessage();
+                    break;
+                case 3:
+                    Rmess.B = 15;
+                    Rmess.F = 75;
+                    Rmess.N++;
+                    if (Rdata.l0 =="0")
+                    {
+                        shag++;
+                        Rmess.B = 0;
+                    }
+                    SendUDPMessage();
+                    break;
+                case 4:
+                    Rmess.N++;
+                    if (Rdata.l4 == "0")
+                    {
+                        Rmess.B = 50;
+                    }
+                    else if (Rdata.l3 == "0")
+                    {
+                        Rmess.B = -50;
+                    }
+                    else
+                    {
+                        Rmess.B = 0;
+                    }
                     SendUDPMessage();
                     break;
             }
