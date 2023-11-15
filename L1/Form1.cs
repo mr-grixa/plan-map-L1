@@ -306,69 +306,84 @@ namespace L1
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            label_shag.Text = shag.ToString();
-            switch (shag)
+            //label_shag.Text = shag.ToString();
+            //switch (shag)
+            //{
+            //    case 0://Прямо до препядствия 
+            //        Rmess.B = 0;
+            //        Rmess.F = 100;
+            //        Rmess.N++;
+            //        if (int.Parse(Rdata.d3) < 200)
+            //        {
+            //            shag++;
+            //            Rmess.F = 0;
+            //        }
+            //        SendUDPMessage();
+            //        break;
+            //    case 1://на лево пока препядствие не появится на крайнем правом лидаре
+            //        Rmess.B = -50;
+            //        Rmess.F = 75;
+            //        Rmess.N++;
+            //        if (int.Parse(Rdata.d6) < 200)
+            //        {
+            //            shag++;
+            //            Rmess.B = 25;
+            //        }
+            //        SendUDPMessage();
+            //        break;
+            //    case 2://на право пока куб не перестанет быть виден 
+            //        Rmess.B = 50;
+            //        Rmess.F = 75;
+            //        Rmess.N++;
+            //        if (int.Parse(Rdata.d6) > 300)
+            //        {
+            //            shag++;
+            //            Rmess.B = 0;
+            //        }
+            //        SendUDPMessage();
+            //        break;
+            //    case 3://на право до полосы 
+            //        Rmess.B = 40;
+            //        Rmess.F = 75;
+            //        Rmess.N++;
+            //        if (Rdata.l0 == "1")
+            //        {
+            //            shag++;
+            //            Rmess.B = 50;
+            //        }
+            //        SendUDPMessage();
+            //        break;
+            //    case 5://движение по полосе
+            //        Rmess.N++;
+            //        if (Rdata.l4 == "0")
+            //        {
+            //            Rmess.B = 50;
+            //        }
+            //        else if (Rdata.l3 == "0")
+            //        {
+            //            Rmess.B = -50;
+            //        }
+            //        else
+            //        {
+            //            Rmess.B = 0;
+            //        }
+            //        SendUDPMessage();
+            //        break;
+            //}
+            if (int.Parse(Rdata.d1) > 200&& int.Parse(Rdata.d2) > 200)
             {
-                case 0:
-                    Rmess.B = 0;
-                    Rmess.F = 100;
-                    Rmess.N++;
-                    if (int.Parse(Rdata.d3) < 200)
-                    {
-                        shag++;
-                        Rmess.F = 0;
-                    }
-                    SendUDPMessage();
-                    break;
-                case 1:
-                    Rmess.B = -50;
-                    Rmess.F = 75;
-                    Rmess.N++;
-                    if (int.Parse(Rdata.d6) < 200)
-                    {
-                        shag++;
-                        Rmess.B = 25;
-                    }
-                    SendUDPMessage();
-                    break;
-                case 2:
-                    Rmess.B = 50;
-                    Rmess.F = 75;
-                    Rmess.N++;
-                    if (int.Parse(Rdata.d6) > 300)
-                    {
-                        shag++;
-                        Rmess.B = 0;
-                    }
-                    SendUDPMessage();
-                    break;
-                case 3:
-                    Rmess.B = 15;
-                    Rmess.F = 75;
-                    Rmess.N++;
-                    if (Rdata.l0 =="0")
-                    {
-                        shag++;
-                        Rmess.B = 0;
-                    }
-                    SendUDPMessage();
-                    break;
-                case 4:
-                    Rmess.N++;
-                    if (Rdata.l4 == "0")
-                    {
-                        Rmess.B = 50;
-                    }
-                    else if (Rdata.l3 == "0")
-                    {
-                        Rmess.B = -50;
-                    }
-                    else
-                    {
-                        Rmess.B = 0;
-                    }
-                    SendUDPMessage();
-                    break;
+                Rmess.B = 0;
+                Rmess.F = 100;
+                Rmess.N++;
+                SendUDPMessage();
+            }
+            else
+            {
+                int k = int.Parse(Rdata.d1) - int.Parse(Rdata.d2);
+                k = k / 2;
+                Rmess.B = k;
+                Rmess.F = 75;
+                label_shag.Text = k.ToString();
             }
         }
 
