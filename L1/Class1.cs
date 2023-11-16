@@ -23,6 +23,7 @@
         public string l2 { get; set; }
         public string l3 { get; set; }
         public string l4 { get; set; }
+
     }
     public class RobotMessage
     {
@@ -31,5 +32,20 @@
         public int F { get; set; }
         public int B { get; set; }
         public int T { get; set; }
+    }
+
+    public static class RobotDataExtensions
+    {
+        public static int ToInt(this string value)
+        {
+            int result;
+            if (int.TryParse(value, out result))
+            {
+                return result;
+            }
+            // You might want to handle the case where parsing fails,
+            // for now, I'll return 0 in case of failure.
+            return 0;
+        }
     }
 }

@@ -390,7 +390,18 @@ namespace L1
                 SendUDPMessage();
             }
         }
-
+        public int check_Way()
+        {
+            int k = int.Parse(Rdata.d2) - int.Parse(Rdata.d4);
+            if (k > 0) k = -1; else k = 1;
+            if (Rdata.d1.ToInt() < 111 && Rdata.d2.ToInt() < 111 &&
+                Rdata.d3.ToInt() < 150&&
+                Rdata.d4.ToInt() < 111 && Rdata.d5.ToInt() < 111)
+            {
+                k = 0;
+            }
+            return k;
+        }
         private void up_N_ValueChanged(object sender, EventArgs e)
         {
             Rmess.N = (int)up_N.Value;
