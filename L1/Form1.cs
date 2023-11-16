@@ -374,7 +374,7 @@ namespace L1
             //}
             if (int.Parse(Rdata.d2) > 200 && int.Parse(Rdata.d4) > 200)
             {
-                Rmess.B = 0;
+                Rmess.B = -30;
                 Rmess.F = 100;
                 Rmess.N++;
                 SendUDPMessage();
@@ -382,10 +382,11 @@ namespace L1
             else
             {
                 int k = int.Parse(Rdata.d2) - int.Parse(Rdata.d4);
-                if (k < 0) k = -1; else k = 1;
+                if (k > 0) k = -1; else k = 1;
                 Rmess.B = (int)(95*k);
                 Rmess.F = 50;
                 label_shag.Text = k.ToString();
+                Rmess.N++;
                 SendUDPMessage();
             }
         }
