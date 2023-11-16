@@ -306,7 +306,9 @@ namespace L1
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            //label_shag.Text = shag.ToString();
+            //int k = int.Parse(Rdata.d2) - int.Parse(Rdata.d4);
+            //if (k != null) label_shag.Text = k.ToString();
+            label_shag.Text = shag.ToString();
             //switch (shag)
             //{
             //    case 0://Прямо до препядствия 
@@ -370,7 +372,7 @@ namespace L1
             //        SendUDPMessage();
             //        break;
             //}
-            if (int.Parse(Rdata.d1) > 200&& int.Parse(Rdata.d2) > 200)
+            if (int.Parse(Rdata.d2) > 200 && int.Parse(Rdata.d4) > 200)
             {
                 Rmess.B = 0;
                 Rmess.F = 100;
@@ -379,11 +381,12 @@ namespace L1
             }
             else
             {
-                int k = int.Parse(Rdata.d1) - int.Parse(Rdata.d2);
-                k = k / 2;
-                Rmess.B = k;
-                Rmess.F = 75;
+                int k = int.Parse(Rdata.d2) - int.Parse(Rdata.d4);
+                if (k < 0) k = -1; else k = 1;
+                Rmess.B = (int)(95*k);
+                Rmess.F = 50;
                 label_shag.Text = k.ToString();
+                SendUDPMessage();
             }
         }
 
