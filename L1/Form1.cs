@@ -369,62 +369,7 @@ namespace L1
                     }
                     SendUDPMessage();
                     break;
-                    //case 2://на право пока куб не перестанет быть виден 
-                    //    Rmess.B = 50;
-                    //    Rmess.F = 75;
-                    //    Rmess.N++;
-                    //    if (int.Parse(Rdata.d6) > 300)
-                    //    {
-                    //        shag++;
-                    //        Rmess.B = 0;
-                    //    }
-                    //    SendUDPMessage();
-                    //    break;
-                    //case 3://на право до полосы 
-                    //    Rmess.B = 40;
-                    //    Rmess.F = 75;
-                    //    Rmess.N++;
-                    //    if (Rdata.l0 == "1")
-                    //    {
-                    //        shag++;
-                    //        Rmess.B = 50;
-                    //    }
-                    //    SendUDPMessage();
-                    //    break;
-                    //case 5://движение по полосе
-                    //    Rmess.N++;
-                    //    if (Rdata.l4 == "0")
-                    //    {
-                    //        Rmess.B = 50;
-                    //    }
-                    //    else if (Rdata.l3 == "0")
-                    //    {
-                    //        Rmess.B = -50;
-                    //    }
-                    //    else
-                    //    {
-                    //        Rmess.B = 0;
-                    //    }
-                    //    SendUDPMessage();
-                    //    break;
             }
-            //if (check_Way() == 0)
-            //{
-            //    Rmess.B = 0;
-            //    Rmess.F = 100;
-            //    Rmess.N++;
-            //    SendUDPMessage();
-            //}
-            //else
-            //{
-            //    int k = int.Parse(Rdata.d2) - int.Parse(Rdata.d4);
-            //    if (k > 0) k = -1; else k = 1;
-            //    Rmess.B = (int)(95*k);
-            //    Rmess.F = 50;
-            //    label_shag.Text = k.ToString();
-            //    Rmess.N++;
-            //    SendUDPMessage();
-            //}
         }
         public int check_Way()
         {
