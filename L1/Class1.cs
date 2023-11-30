@@ -43,8 +43,6 @@
             {
                 return result;
             }
-            // You might want to handle the case where parsing fails,
-            // for now, I'll return 0 in case of failure.
             return 0;
         }
     }

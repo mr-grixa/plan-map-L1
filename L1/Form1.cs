@@ -309,95 +309,106 @@ namespace L1
             //int k = int.Parse(Rdata.d2) - int.Parse(Rdata.d4);
             //if (k != null) label_shag.Text = k.ToString();
             label_shag.Text = shag.ToString();
-            //switch (shag)
+            switch (shag)
+            {
+                case 0://Прямо до препядствия 
+                    if (check_Way() == 0)
+                    {
+                        Rmess.B = 0;
+                        Rmess.F = 100;
+                        Rmess.N++;
+                        SendUDPMessage();
+                    }
+                    else { shag++; }
+                    break;
+                case 1://на лево 
+                    if (int.Parse(Rdata.d3) <200)
+                    {
+                        Rmess.B = -100;
+                        Rmess.F = 100;
+                        Rmess.N++;
+                        SendUDPMessage();
+                    }
+                    else { shag++; }
+                    break;
+                case 2://обход
+                    Rmess.B = 60;
+                    Rmess.F = 70;
+                    Rmess.N++;
+                    int k = check_Way();
+                    if (k != 0)
+                    {
+                        Rmess.B = 100*k;
+                    }
+                    SendUDPMessage();
+                    break;
+                //case 2://на право пока куб не перестанет быть виден 
+                //    Rmess.B = 50;
+                //    Rmess.F = 75;
+                //    Rmess.N++;
+                //    if (int.Parse(Rdata.d6) > 300)
+                //    {
+                //        shag++;
+                //        Rmess.B = 0;
+                //    }
+                //    SendUDPMessage();
+                //    break;
+                //case 3://на право до полосы 
+                //    Rmess.B = 40;
+                //    Rmess.F = 75;
+                //    Rmess.N++;
+                //    if (Rdata.l0 == "1")
+                //    {
+                //        shag++;
+                //        Rmess.B = 50;
+                //    }
+                //    SendUDPMessage();
+                //    break;
+                //case 5://движение по полосе
+                //    Rmess.N++;
+                //    if (Rdata.l4 == "0")
+                //    {
+                //        Rmess.B = 50;
+                //    }
+                //    else if (Rdata.l3 == "0")
+                //    {
+                //        Rmess.B = -50;
+                //    }
+                //    else
+                //    {
+                //        Rmess.B = 0;
+                //    }
+                //    SendUDPMessage();
+                //    break;
+            }
+            //if (check_Way() == 0)
             //{
-            //    case 0://Прямо до препядствия 
-            //        Rmess.B = 0;
-            //        Rmess.F = 100;
-            //        Rmess.N++;
-            //        if (int.Parse(Rdata.d3) < 200)
-            //        {
-            //            shag++;
-            //            Rmess.F = 0;
-            //        }
-            //        SendUDPMessage();
-            //        break;
-            //    case 1://на лево пока препядствие не появится на крайнем правом лидаре
-            //        Rmess.B = -50;
-            //        Rmess.F = 75;
-            //        Rmess.N++;
-            //        if (int.Parse(Rdata.d6) < 200)
-            //        {
-            //            shag++;
-            //            Rmess.B = 25;
-            //        }
-            //        SendUDPMessage();
-            //        break;
-            //    case 2://на право пока куб не перестанет быть виден 
-            //        Rmess.B = 50;
-            //        Rmess.F = 75;
-            //        Rmess.N++;
-            //        if (int.Parse(Rdata.d6) > 300)
-            //        {
-            //            shag++;
-            //            Rmess.B = 0;
-            //        }
-            //        SendUDPMessage();
-            //        break;
-            //    case 3://на право до полосы 
-            //        Rmess.B = 40;
-            //        Rmess.F = 75;
-            //        Rmess.N++;
-            //        if (Rdata.l0 == "1")
-            //        {
-            //            shag++;
-            //            Rmess.B = 50;
-            //        }
-            //        SendUDPMessage();
-            //        break;
-            //    case 5://движение по полосе
-            //        Rmess.N++;
-            //        if (Rdata.l4 == "0")
-            //        {
-            //            Rmess.B = 50;
-            //        }
-            //        else if (Rdata.l3 == "0")
-            //        {
-            //            Rmess.B = -50;
-            //        }
-            //        else
-            //        {
-            //            Rmess.B = 0;
-            //        }
-            //        SendUDPMessage();
-            //        break;
+            //    Rmess.B = 0;
+            //    Rmess.F = 100;
+            //    Rmess.N++;
+            //    SendUDPMessage();
             //}
-            if (1==1)
-            {
-                Rmess.B = check_Way()*100;
-                Rmess.F = 100;
-                Rmess.N++;
-                SendUDPMessage();
-            }
-            else
-            {
-                int k = int.Parse(Rdata.d2) - int.Parse(Rdata.d4);
-                if (k > 0) k = -1; else k = 1;
-                Rmess.B = (int)(95*k);
-                Rmess.F = 50;
-                label_shag.Text = k.ToString();
-                Rmess.N++;
-                SendUDPMessage();
-            }
+            //else
+            //{
+            //    int k = int.Parse(Rdata.d2) - int.Parse(Rdata.d4);
+            //    if (k > 0) k = -1; else k = 1;
+            //    Rmess.B = (int)(95*k);
+            //    Rmess.F = 50;
+            //    label_shag.Text = k.ToString();
+            //    Rmess.N++;
+            //    SendUDPMessage();
+            //}
         }
         public int check_Way()
         {
             int k = (int.Parse(Rdata.d1)+int.Parse(Rdata.d2))
                 - (int.Parse(Rdata.d4)+ int.Parse(Rdata.d4));
             if (k > 0) k = -1; else k = 1;
-            if (Rdata.d1.ToInt() < 65 && Rdata.d2.ToInt() < 126 &&
-                Rdata.d3.ToInt() < 150&&
-                Rdata.d5.ToInt() < 65 && Rdata.d4.ToInt() < 125)
+            if (Rdata.d0.ToInt() > 45 &&
+                Rdata.d1.ToInt() > 100 && Rdata.d2.ToInt() > 150 &&
+                Rdata.d3.ToInt() > 150&&                  
+                Rdata.d5.ToInt() > 100 && Rdata.d4.ToInt() > 150 &&
+                Rdata.d6.ToInt() > 45)
             {
                 k = 0;
             }
