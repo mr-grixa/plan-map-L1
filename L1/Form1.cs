@@ -291,7 +291,7 @@ namespace L1
         {
             if (checkBox_AI.Checked)
             {
-                Rmess.B = 30;
+                Rmess.B = 0;
                 Rmess.F = 100;
                 Rmess.N++;
                 SendUDPMessage();
@@ -306,24 +306,35 @@ namespace L1
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            switch (shag)
+            int AZ = 0;
+            if (int.Parse(Rdata.az)<180) { AZ = 1; }
+            if (int.Parse(Rdata.az) > 180) { AZ = -1; }
+            Rmess.B = 50*AZ;
+            Rmess.F = 100;
+            Rmess.N++;
+            int W = check_Way();
+            if (W != 0)
             {
-                case 0:
-                    shag = 1;
-                    Rmess.B = -30;
-                    Rmess.F = 100;
-                    Rmess.N++;
-                    SendUDPMessage();
-                    break;
-                case 1:
-                    Rmess.B = 0;
-                    Rmess.F = 0;
-                    Rmess.N++;
-                    SendUDPMessage();
-                    break;
+                Rmess.B = 75*W;
             }
+            SendUDPMessage();
+            ReportListBox.Items.Add(Rmess);
         }
-
+        public int check_Way()
+        {
+            int k = (int.Parse(Rdata.d1) + int.Parse(Rdata.d2))
+                - (int.Parse(Rdata.d4) + int.Parse(Rdata.d4));
+            if (k > 0) k = -1; else k = 1;
+            if (Rdata.d0.ToInt() > 45 &&
+                Rdata.d1.ToInt() > 100 && Rdata.d2.ToInt() > 150 &&
+                Rdata.d3.ToInt() > 150 &&
+                Rdata.d5.ToInt() > 100 && Rdata.d4.ToInt() > 150 &&
+                Rdata.d6.ToInt() > 45)
+            {
+                k = 0;
+            }
+            return k;
+        }
         private void up_N_ValueChanged(object sender, EventArgs e)
         {
             Rmess.N = (int)up_N.Value;
