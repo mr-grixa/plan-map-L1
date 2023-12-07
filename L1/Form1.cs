@@ -147,7 +147,7 @@ namespace L1
                                 {
                                     Trigger();
                                 }
-
+                                EncoderMap();
                                 map();
                             }
                             catch
@@ -272,6 +272,50 @@ namespace L1
 
         }
 
+
+        public (double x, double y, double theta) GetPose(double x, double y, double theta, double leftEncoder, double rightEncoder)
+        {
+            double dLeftEncoder = leftEncoder - prevLeftEncoder;
+            double dRightEncoder = rightEncoder - prevRightEncoder;
+
+            prevLeftEncoder = leftEncoder;
+            prevRightEncoder = rightEncoder;
+            // Вычисляем линейные и угловые приращения  
+            double dx, dy, dTheta;
+            (dx, dy, dTheta) = GetDeltaPose(dLeftEncoder*0.01, dRightEncoder * 0.01);
+
+            // Интегрируем для получения новой позиции
+            double newX = x + dx;
+            double newY = y + dy * Math.Cos(theta) - dx * Math.Sin(theta);
+            double newTheta = theta + dTheta;
+
+            // Возвращаем обновленную позицию 
+            return (newX, newY, newTheta);
+        }
+        double WHEEL_DIAMETER = 0.1;
+        double WHEEL_SEPARATION = 0.5;
+        double prevLeftEncoder;
+        double prevRightEncoder;
+        public (double dx, double dy, double theta) GetDeltaPose(double leftEncoder, double rightEncoder)
+        {
+
+            // Расстояние пройденное левым и правым колесом 
+            double leftDistance = leftEncoder * WHEEL_DIAMETER;
+            double rightDistance = rightEncoder * WHEEL_DIAMETER;
+
+            // Вычисляем среднее расстояние
+            double distance = (leftDistance + rightDistance) / 2;
+
+            // Вычисляем угол поворота
+            double theta = (rightDistance - leftDistance) / WHEEL_SEPARATION;
+
+            // Вычисляем приращения x и y 
+            double dx = distance * Math.Cos(theta);
+            double dy = distance * Math.Sin(theta);
+
+            // Возвращаем координаты и угол
+            return (dx, dy, theta);
+        }
         void map()
         {
             int mnozetel = 20;
@@ -281,9 +325,24 @@ namespace L1
             int x = Convert.ToInt32(dx* mnozetel);
             int y = Convert.ToInt32(dy * mnozetel);
             g.FillRectangle(Brushes.Red, x,pictureBox_map.Size.Height -y, 1, 1);
-            label_X.Text = x.ToString();
-            label_Y.Text = y.ToString();
+            //label_X.Text = Rdata.x;
+            //label_Y.Text = Rdata.y;
             pictureBox_map.Image=bitmap;
+            //pictureBox_map.Image.RotateFlip(RotateFlipType.Rotate180FlipX);
+        }        
+        double X = 0.75; double Y = 0.75;
+        double theta = -Math.PI;
+        void EncoderMap()
+        {
+            int mnozetel = 1;
+            Graphics g = Graphics.FromImage(bitmap);
+            (X, Y, theta) = GetPose(X, Y, theta, double.Parse(Rdata.le), double.Parse(Rdata.re));
+            int x = Convert.ToInt32(X * mnozetel);
+            int y = Convert.ToInt32(Y * mnozetel);
+            g.FillRectangle(Brushes.Blue, x, pictureBox_map.Size.Height - y, 2, 2);
+            label_X.Text = Rdata.x;
+            label_Y.Text = Rdata.y;
+            pictureBox_map.Image = bitmap;
             //pictureBox_map.Image.RotateFlip(RotateFlipType.Rotate180FlipX);
         }
         int shag = 0;
