@@ -61,6 +61,15 @@
             this.label_Y = new System.Windows.Forms.Label();
             this.pictureBox_map = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.label12 = new System.Windows.Forms.Label();
+            this.label_dtheta = new System.Windows.Forms.Label();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label_target = new System.Windows.Forms.Label();
+            this.label_dist = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label_angle = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_control)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.up_T)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.up_B)).BeginInit();
@@ -362,7 +371,7 @@
             // label_Y
             // 
             this.label_Y.AutoSize = true;
-            this.label_Y.Location = new System.Drawing.Point(69, 368);
+            this.label_Y.Location = new System.Drawing.Point(64, 368);
             this.label_Y.Name = "label_Y";
             this.label_Y.Size = new System.Drawing.Size(19, 13);
             this.label_Y.TabIndex = 52;
@@ -382,11 +391,100 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(17, 393);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(35, 13);
+            this.label12.TabIndex = 56;
+            this.label12.Text = "Угол ";
+            // 
+            // label_dtheta
+            // 
+            this.label_dtheta.AutoSize = true;
+            this.label_dtheta.Location = new System.Drawing.Point(17, 406);
+            this.label_dtheta.Name = "label_dtheta";
+            this.label_dtheta.Size = new System.Drawing.Size(19, 13);
+            this.label_dtheta.TabIndex = 57;
+            this.label_dtheta.Text = "10";
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(480, 245);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(211, 199);
+            this.listBox1.TabIndex = 58;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(697, 245);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(36, 13);
+            this.label13.TabIndex = 59;
+            this.label13.Text = "Цель:";
+            // 
+            // label_target
+            // 
+            this.label_target.AutoSize = true;
+            this.label_target.Location = new System.Drawing.Point(697, 267);
+            this.label_target.Name = "label_target";
+            this.label_target.Size = new System.Drawing.Size(13, 13);
+            this.label_target.TabIndex = 60;
+            this.label_target.Text = "0";
+            // 
+            // label_dist
+            // 
+            this.label_dist.AutoSize = true;
+            this.label_dist.Location = new System.Drawing.Point(697, 318);
+            this.label_dist.Name = "label_dist";
+            this.label_dist.Size = new System.Drawing.Size(13, 13);
+            this.label_dist.TabIndex = 62;
+            this.label_dist.Text = "0";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(697, 296);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(70, 13);
+            this.label15.TabIndex = 61;
+            this.label15.Text = "Расстояние:";
+            // 
+            // label_angle
+            // 
+            this.label_angle.AutoSize = true;
+            this.label_angle.Location = new System.Drawing.Point(697, 377);
+            this.label_angle.Name = "label_angle";
+            this.label_angle.Size = new System.Drawing.Size(13, 13);
+            this.label_angle.TabIndex = 64;
+            this.label_angle.Text = "0";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(697, 355);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(35, 13);
+            this.label17.TabIndex = 63;
+            this.label17.Text = "Угол:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1045, 450);
+            this.Controls.Add(this.label_angle);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.label_dist);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.label_target);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.label_dtheta);
+            this.Controls.Add(this.label12);
             this.Controls.Add(this.pictureBox_map);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label_Y);
@@ -465,6 +563,15 @@
         private System.Windows.Forms.Label label_Y;
         private System.Windows.Forms.PictureBox pictureBox_map;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label_dtheta;
+        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label_target;
+        private System.Windows.Forms.Label label_dist;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label_angle;
+        private System.Windows.Forms.Label label17;
     }
 }
 

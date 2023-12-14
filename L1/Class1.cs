@@ -1,4 +1,6 @@
-﻿namespace L1
+﻿using System;
+
+namespace L1
 {
     public class RobotData
     {
@@ -44,6 +46,32 @@
                 return result;
             }
             return 0;
+        }
+    }
+
+    public struct PointD
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
+    }
+
+    public static class Geometry
+    {
+        public static double GetAngle(PointD p1, PointD p2)
+        {
+            var dx = p2.X - p1.X;
+            var dy = p2.Y - p1.Y;
+
+            var angle = Math.Atan2(dy, dx) * 180 / Math.PI;
+            return angle;
+        }
+
+        public static double GetDistance(PointD p1, PointD p2)
+        {
+            var dx = p2.X - p1.X;
+            var dy = p2.Y - p1.Y;
+
+            return Math.Sqrt(dx * dx + dy * dy);
         }
     }
 }

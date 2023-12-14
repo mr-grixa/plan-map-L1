@@ -26,6 +26,7 @@ using System.Xml.Linq;
 using System.Runtime.InteropServices;
 using System.Globalization;
 using System.IO;
+using System.Numerics;
 
 namespace L1
 {
@@ -37,7 +38,7 @@ namespace L1
         {
             InitializeComponent();
         }
-
+        Dictionary<int, Point> numbers = new Dictionary<int, Point>();
         Bitmap bitmap;
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -147,9 +148,9 @@ namespace L1
                                 if (checkBox_AI.Checked)
                                 {
                                     Trigger();
-                                }
-                                EncoderMap();
+                                }                              
                                 map();
+                                EncoderMap();
                             }
                             catch
                             {
@@ -287,14 +288,10 @@ namespace L1
 
             // Интегрируем для получения новой позиции
             double newX = x + dx;
-            double newY = y + dy * Math.Cos(theta) - dx * Math.Sin(theta);
+            double newY = y + dy * Math.Cos(this.theta) - dx * Math.Sin(this.theta);
             double newTheta = theta + dTheta;
 
             // Возвращаем обновленную позицию 
-            return (newX, newY, newTheta);
-            return (newX, newY, newTheta);
-            return (newX, newY, newTheta);
-            return (newX, newY, newTheta);
             return (newX, newY, newTheta);
         }
         double WHEEL_DIAMETER = 0.1;
@@ -315,12 +312,39 @@ namespace L1
             double theta = (rightDistance - leftDistance) / WHEEL_SEPARATION;
 
             // Вычисляем приращения x и y 
-            double dx = distance * Math.Cos(theta);
-            double dy = distance * Math.Sin(theta);
+            double dx = distance * Math.Cos(this.theta);
+            double dy = distance * Math.Sin(this.theta);
 
             // Возвращаем координаты и угол
             return (dx, dy, theta);
         }
+     
+        double X = 0.75; double Y = 0.75;
+        double theta = -Math.PI;
+        void EncoderMap()
+        {
+
+            int mnozetel = 20;
+            Bitmap Nbit = new Bitmap(bitmap.Width, bitmap.Height);
+            Graphics g = Graphics.FromImage(Nbit);
+            g.DrawImage(bitmap, 0, 0);
+            double dx = Convert.ToDouble(Rdata.x, NumberFormatInfo.InvariantInfo);
+            double dy = Convert.ToDouble(Rdata.y, NumberFormatInfo.InvariantInfo);
+            int x = Convert.ToInt32(dx * mnozetel);
+            int y = pictureBox_map.Size.Height - Convert.ToInt32(dy * mnozetel);
+            theta = Math.PI/180*(double.Parse(Rdata.t.Replace('.',','))-90);         
+            DrawCircleLine(theta,7, x, y,  g);
+            pictureBox_map.Image = Nbit;
+
+        }
+        static void DrawCircleLine(double theta, int r, int xCenter, int yCenter, Graphics g)
+        {
+            int x = (int)(r * Math.Cos(theta));
+            int y = (int)(r * Math.Sin(theta));
+            g.DrawEllipse(Pens.Black, xCenter - r, yCenter - r, r * 2, r * 2);
+            g.DrawLine(Pens.Black, xCenter, yCenter, xCenter + x, yCenter + y);
+        }
+
         void map()
         {
             int mnozetel = 20;
@@ -330,35 +354,23 @@ namespace L1
             int x = Convert.ToInt32(dx* mnozetel);
             int y = Convert.ToInt32(dy * mnozetel);
             g.FillRectangle(Brushes.Red, x,pictureBox_map.Size.Height -y, 1, 1);
-            //label_X.Text = Rdata.x;
-            //label_Y.Text = Rdata.y;
-            pictureBox_map.Image=bitmap;
+            label_X.Text = Rdata.x;
+            label_Y.Text = Rdata.y;
+            theta = Math.PI / 180 * (double.Parse(Rdata.t.Replace('.', ',')) - 90);
+            label_dtheta.Text = theta.ToString();
+            //pictureBox_map.Image=bitmap;
             //pictureBox_map.Image.RotateFlip(RotateFlipType.Rotate180FlipX);
-        }        
-        double X = 0.75; double Y = 0.75;
-        double theta = -Math.PI;
-        void EncoderMap()
-        {
-            int mnozetel = 1;
-            Graphics g = Graphics.FromImage(bitmap);
-            (X, Y, theta) = GetPose(X, Y, theta, double.Parse(Rdata.le), double.Parse(Rdata.re));
-            int x = Convert.ToInt32(X * mnozetel);
-            int y = Convert.ToInt32(Y * mnozetel);
-            g.FillRectangle(Brushes.Blue, x, pictureBox_map.Size.Height - y, 2, 2);
-            label_X.Text = x.ToString();
-            label_Y.Text = y.ToString();
-            pictureBox_map.Image = bitmap;
-            //pictureBox_map.Image.RotateFlip(RotateFlipType.Rotate180FlipX);
-        }
+        }   
         int shag = 0;
         private void checkBox_AI_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox_AI.Checked)
+            if (checkBox_AI.Checked&& numbers.Count!=0)
             {
                 Rmess.B = 0;
                 Rmess.F = 100;
                 Rmess.N++;
                 SendUDPMessage();
+                target= numbers.Keys.Min();
                 timer1.Start();
                 shag = 0;
             }
@@ -367,32 +379,65 @@ namespace L1
                 timer1.Stop();
             }
         }
-
+        int target = 1;
         private void timer1_Tick(object sender, EventArgs e)
         {
+            Point point = new Point();            
+            numbers.TryGetValue(target, out point);
+            PointD tar = new PointD();
+            tar.X = point.X * 0.25;
+            tar.Y =10 -point.Y * 0.25;
+
+            double dx = Convert.ToDouble(Rdata.x, NumberFormatInfo.InvariantInfo);
+            double dy = Convert.ToDouble(Rdata.y, NumberFormatInfo.InvariantInfo);
+            PointD robot = new PointD { X = dx, Y = dy };
+
+            var angle = Geometry.GetAngle(tar, robot);
+            //angle = ((angle + 720) % 360)-180;
+            var dist = Geometry.GetDistance(tar, robot);
+            double angleN = (double.Parse(Rdata.t.Replace('.', ',')));
+            //angleN = ((angleN + 720) % 360)-180;
+            double target_angle = angleN +angle;
+            target_angle = ((target_angle + 720) % 360)-90;
+            label_angle.Text = target_angle.ToString();
+            label_dist.Text = dist.ToString();
+            label_target.Text = target.ToString();
+
+            if (dist < 0.75) {
+                target++;
+                if (target == numbers.Keys.Max())
+                {
+                    ReportListBox.Items.Add("Финиш");
+                    label_target.Text = "Финиш";
+                    checkBox_AI.Checked = false;
+                }
+            }
+
             int AZ = 0;
-            if (int.Parse(Rdata.az)<180) { AZ = 1; }
-            if (int.Parse(Rdata.az) > 180) { AZ = -1; }
-            Rmess.B = 50*AZ;
+            if (target_angle < 180) { AZ = 1; }
+            if (target_angle > 180) { AZ = -1; }
+            Rmess.B = 50 * AZ;
             Rmess.F = 100;
             Rmess.N++;
             int W = check_Way();
             if (W != 0)
             {
-                Rmess.B = 75*W;
+                Rmess.B = 75 * W;
             }
             SendUDPMessage();
             ReportListBox.Items.Add(Rmess);
         }
+
+
         public int check_Way()
         {
             int k = (int.Parse(Rdata.d1) + int.Parse(Rdata.d2))
                 - (int.Parse(Rdata.d4) + int.Parse(Rdata.d4));
             if (k > 0) k = -1; else k = 1;
             if (Rdata.d0.ToInt() > 45 &&
-                Rdata.d1.ToInt() > 100 && Rdata.d2.ToInt() > 150 &&
-                Rdata.d3.ToInt() > 150 &&
-                Rdata.d5.ToInt() > 100 && Rdata.d4.ToInt() > 150 &&
+                Rdata.d1.ToInt() > 50 && Rdata.d2.ToInt() > 75 &&
+                Rdata.d3.ToInt() > 75 &&
+                Rdata.d5.ToInt() > 50 && Rdata.d4.ToInt() > 75 &&
                 Rdata.d6.ToInt() > 45)
             {
                 k = 0;
@@ -443,6 +488,7 @@ namespace L1
                 g.Clear(Color.White);
                 Random rnd = new Random();
                 int size = 5;
+                numbers.Clear();
                 for (int i = 0; i < data.Length; i++)
                 {
                     string line = data[i];
@@ -450,8 +496,14 @@ namespace L1
                     for (int j = 0; j < line.Length; j++)
                     {
                         char c = line[j];
+                        if (char.IsDigit(c))
+                        {
+                            g.FillRectangle(Brushes.Orange, j * size, i * size, size, size);
 
-                        if (c == '#')
+                            Point coord = new Point(j, i);
+                            numbers.Add((c - '0'), coord);
+                        }
+                        else if (c == '#')
                         {
                             g.FillRectangle(Brushes.Gray, j * size, i * size, size, size);
                         }
@@ -467,6 +519,13 @@ namespace L1
                     }
                 }
                 pictureBox_map.Image = bitmap;
+                listBox1.Items.Clear();
+                var sortedNumbers = from entry in numbers orderby entry.Key ascending select entry;
+                foreach (KeyValuePair<int, Point> pair in sortedNumbers)
+                {
+                    listBox1.Items.Add($"{pair.Key} = {pair.Value}");
+
+                }
             }
         }
 
