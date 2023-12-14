@@ -403,15 +403,7 @@ namespace L1
             label_dist.Text = dist.ToString();
             label_target.Text = target.ToString();
 
-            if (dist < 0.75) {
-                target++;
-                if (target == numbers.Keys.Max())
-                {
-                    ReportListBox.Items.Add("Финиш");
-                    label_target.Text = "Финиш";
-                    checkBox_AI.Checked = false;
-                }
-            }
+
 
             int AZ = 0;
             if (target_angle < 180) { AZ = 1; }
@@ -423,6 +415,19 @@ namespace L1
             if (W != 0)
             {
                 Rmess.B = 75 * W;
+            }
+            if (dist < 0.75)
+            {
+                target++;
+                if (target > numbers.Keys.Max())
+                {
+                    ReportListBox.Items.Add("Финиш");
+                    label_target.Text = "Финиш";
+                    checkBox_AI.Checked = false;
+                    Rmess.B = 0;
+                    Rmess.F = 0;
+
+                }
             }
             SendUDPMessage();
             ReportListBox.Items.Add(Rmess);
