@@ -300,6 +300,7 @@
             // UDPRegularSenderTimer
             // 
             this.UDPRegularSenderTimer.Interval = 1000;
+            this.UDPRegularSenderTimer.Tick += new System.EventHandler(this.UDPRegularSenderTimer_Tick_1);
             // 
             // checkBox_N
             // 
@@ -375,6 +376,7 @@
             this.pictureBox_map.Size = new System.Drawing.Size(320, 200);
             this.pictureBox_map.TabIndex = 54;
             this.pictureBox_map.TabStop = false;
+            this.pictureBox_map.Click += new System.EventHandler(this.pictureBox_map_Click_1);
             // 
             // timer1
             // 

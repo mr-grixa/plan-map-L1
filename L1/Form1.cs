@@ -25,6 +25,7 @@ using System.Text.Json.Serialization;
 using System.Xml.Linq;
 using System.Runtime.InteropServices;
 using System.Globalization;
+using System.IO;
 
 namespace L1
 {
@@ -282,7 +283,7 @@ namespace L1
             prevRightEncoder = rightEncoder;
             // Вычисляем линейные и угловые приращения  
             double dx, dy, dTheta;
-            (dx, dy, dTheta) = GetDeltaPose(dLeftEncoder*0.01, dRightEncoder * 0.01);
+            (dx, dy, dTheta) = GetDeltaPose(dLeftEncoder, dRightEncoder);
 
             // Интегрируем для получения новой позиции
             double newX = x + dx;
@@ -290,6 +291,10 @@ namespace L1
             double newTheta = theta + dTheta;
 
             // Возвращаем обновленную позицию 
+            return (newX, newY, newTheta);
+            return (newX, newY, newTheta);
+            return (newX, newY, newTheta);
+            return (newX, newY, newTheta);
             return (newX, newY, newTheta);
         }
         double WHEEL_DIAMETER = 0.1;
@@ -340,8 +345,8 @@ namespace L1
             int x = Convert.ToInt32(X * mnozetel);
             int y = Convert.ToInt32(Y * mnozetel);
             g.FillRectangle(Brushes.Blue, x, pictureBox_map.Size.Height - y, 2, 2);
-            label_X.Text = Rdata.x;
-            label_Y.Text = Rdata.y;
+            label_X.Text = x.ToString();
+            label_Y.Text = y.ToString();
             pictureBox_map.Image = bitmap;
             //pictureBox_map.Image.RotateFlip(RotateFlipType.Rotate180FlipX);
         }
@@ -419,5 +424,55 @@ namespace L1
             Rmess.T = (int)up_T.Value;
         }
 
+
+        private void pictureBox_map_Click_1(object sender, EventArgs e)
+        {
+            string[] data;
+            OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
+            OpenFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            OpenFileDialog1.FilterIndex = 2;
+            OpenFileDialog1.RestoreDirectory = true;
+            if (OpenFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamReader sw = new StreamReader(OpenFileDialog1.FileName, false))
+                {
+                    data = sw.ReadToEnd().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                    int s = 2;
+                }
+                Graphics g = Graphics.FromImage(bitmap);
+                g.Clear(Color.White);
+                Random rnd = new Random();
+                int size = 5;
+                for (int i = 0; i < data.Length; i++)
+                {
+                    string line = data[i];
+
+                    for (int j = 0; j < line.Length; j++)
+                    {
+                        char c = line[j];
+
+                        if (c == '#')
+                        {
+                            g.FillRectangle(Brushes.Gray, j * size, i * size, size, size);
+                        }
+                        else if (c == '.')
+                        {
+                            // не рисовать
+                        }
+                        else
+                        {
+                            Color color = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
+                            g.FillRectangle(new SolidBrush(color), j * size, i * size, size, size);
+                        }
+                    }
+                }
+                pictureBox_map.Image = bitmap;
+            }
+        }
+
+        private void UDPRegularSenderTimer_Tick_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
